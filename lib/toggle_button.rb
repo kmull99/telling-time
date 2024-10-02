@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# RUBY 2D has third party dependencies. Install them here:
+# https://www.ruby2d.com/learn/get-started/#set-up-your-ruby-environment
 require 'ruby2d'
 
 class ToggleButton
