@@ -15,7 +15,12 @@ CLOCK_Y = 240
 @starting_lives = 3
 @lives = []
 
-@show_minutes = true
+# true: Prints 0-60 minutes around the clock
+@show_minutes = false
+
+# true: Hour hand points directly to given hour
+# false: Hour hand is adjusted to given minutes
+@block_hours = false
 
 @hour_hand = nil
 @minute_hand = nil
@@ -224,13 +229,19 @@ end
 def set_clock
   ##  POINT TO A RANDOM TIME  ##
 
-  hours = rand(12)
-  @hour_hand.x2 = 100 * Math.sin((12 - hours) * 30 * Math::PI / 180) + CLOCK_X
-  @hour_hand.y2 = -100 * Math.cos((12 - hours) * 30 * Math::PI / 180) + CLOCK_Y
-
   minutes = rand(12)
   @minute_hand.x2 = 150 * Math.sin((12 - minutes) * 30 * Math::PI / 180) + CLOCK_X
   @minute_hand.y2 = -150 * Math.cos((12 - minutes) * 30 * Math::PI / 180) + CLOCK_Y
+
+  hours = rand(12)
+
+  if @block_hours || minutes == 0
+    @hour_hand.x2 = 100 * Math.sin((12 - hours) * 30 * Math::PI / 180) + CLOCK_X
+    @hour_hand.y2 = -100 * Math.cos((12 - hours) * 30 * Math::PI / 180) + CLOCK_Y
+  else
+    @hour_hand.x2 = 100 * Math.sin((12.0 - hours + (12.0 - minutes) / 12) * 30 * Math::PI / 180) + CLOCK_X
+    @hour_hand.y2 = -100 * Math.cos((12.0 - hours + (12.0 - minutes) / 12) * 30 * Math::PI / 180) + CLOCK_Y
+  end
 
   @answer = [12 - hours, (12 - minutes) * 5]
 end
