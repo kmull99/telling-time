@@ -4,6 +4,12 @@ Enter the displayed time using the numbers on the left side. The
 check button will not show until you've selected the hours & 
 minutes. Your final score is printed to the console.
 
+Controls:
+  - Mouse:  Click buttons
+  - t:      Change time
+  - m:      Show/hide minutes
+  - esc:    quit (does not print final score)
+
 Enable/disable optional features by editing instance variables in telling_time.rb
   - @starting_lives
     - Can be set to any non-negative integer

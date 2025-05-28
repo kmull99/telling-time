@@ -17,6 +17,7 @@ CLOCK_Y = 240
 
 # true: Prints 0-60 minutes around the clock
 @show_minutes = false
+@minutes = []
 
 # true: Hour hand points directly to given hour
 # false: Hour hand is adjusted to given minutes
@@ -35,6 +36,8 @@ CLOCK_Y = 240
 
 @sounds = { correct: nil, wrong: nil, button: nil, lose: nil }
 @output = { score: nil }
+
+@initialized = false
 
 def check_answer
   return unless @current_hour_button && @current_minute_button
@@ -55,6 +58,10 @@ def decrement_lives
 
   @lives[-1].remove
   @lives.pop
+end
+
+def difficulty_select
+###############################
 end
 
 def game_over
@@ -137,13 +144,13 @@ def make_clock
 
   ## DRAW CLOCK HANDS ##
 
-  @hour_hand = Line.new(
+  @hour_hand ||= Line.new(
     x1: CLOCK_X, y1: CLOCK_Y,
     width: 5,
     color: 'silver',
     z: 5
   )
-  @minute_hand = Line.new(
+  @minute_hand ||= Line.new(
     x1: CLOCK_X, y1: CLOCK_Y,
     width: 5,
     color: 'black',
@@ -180,7 +187,6 @@ def make_clock
   end
 
   # Draw minutes
-  return unless @show_minutes
 
   point = { x: 0, y: -160 }
   points = [[point[:x] + CLOCK_X, point[:y] + CLOCK_Y]]
@@ -193,17 +199,19 @@ def make_clock
   end
 
   for i in 0..1
-    Image.new(
+    @minutes << Image.new(
       "assets/#{i * 5}.png",
       x: points[i][0] - 4, y: points[i][1] - 6,
-      width: 8, height: 12
+      width: 8, height: 12,
+      opacity: @show_minutes ? 1 : 0
     )
   end
   for i in 2..11
-    Image.new(
+    @minutes << Image.new(
       "assets/#{i * 5}.png",
       x: points[i][0] - 9, y: points[i][1] - 6,
-      width: 18, height: 12
+      width: 18, height: 12,
+      opacity: @show_minutes ? 1 : 0
     )
   end
 end
@@ -257,6 +265,14 @@ def set_lives
   end
 end
 
+def set_minute_display
+  @show_minutes = !@show_minutes
+
+  @minutes.each do |minute|
+    minute.color.opacity = @show_minutes ? 1 : 0
+  end
+end
+
 def set_score
   @output[:score] = Text.new(
     "Score: #{@score}",
@@ -289,6 +305,7 @@ def main
 
     quit if key == 'escape'
     set_clock if key == 't'
+    set_minute_display if key == 'm'
   end
 
   on :mouse_down do |event|
