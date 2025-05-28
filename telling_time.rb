@@ -37,8 +37,6 @@ CLOCK_Y = 240
 @sounds = { correct: nil, wrong: nil, button: nil, lose: nil }
 @output = { score: nil }
 
-@initialized = false
-
 def check_answer
   return unless @current_hour_button && @current_minute_button
 
@@ -58,10 +56,6 @@ def decrement_lives
 
   @lives[-1].remove
   @lives.pop
-end
-
-def difficulty_select
-  ###############################
 end
 
 def game_over

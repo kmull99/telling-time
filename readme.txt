@@ -11,15 +11,6 @@ Controls:
   - b:      Enable/disable block_hours
   - esc:    quit (does not print final score)
 
-Enable/disable optional features by editing instance variables in telling_time.rb
-  - @starting_lives
-    - Can be set to any non-negative integer
-  - @show_minutes
-    - Set to true to print minutes (0-60) around the clock
-  - @block_hours
-    - false: The hour hand moves with the minute hand, like a real clock.
-    - true: The hour hand points directly to the current hour.
-
 Setup:
   - Install ruby for your system
   - Install ruby2d & it's dependencies
@@ -30,7 +21,6 @@ Setup:
 
 
 TODO:
-  - Improve difficulty select
   - Improve final score display
   - Play again
   - Custom difficulty
