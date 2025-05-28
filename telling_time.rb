@@ -61,7 +61,7 @@ def decrement_lives
 end
 
 def difficulty_select
-###############################
+  ###############################
 end
 
 def game_over
@@ -234,15 +234,20 @@ def reset_buttons
   @check_button.color = 'gray'
 end
 
-def set_clock
+def set_block_hours
+  @block_hours = !@block_hours
+
+  set_clock 12 - @answer[0], 12 - @answer[1] / 5
+end
+
+def set_clock(hours = nil, minutes = nil)
   ##  POINT TO A RANDOM TIME  ##
 
-  minutes = rand(12)
+  minutes ||= rand(12)
   @minute_hand.x2 = 150 * Math.sin((12 - minutes) * 30 * Math::PI / 180) + CLOCK_X
   @minute_hand.y2 = -150 * Math.cos((12 - minutes) * 30 * Math::PI / 180) + CLOCK_Y
 
-  hours = rand(12)
-
+  hours ||= rand(12)
   if @block_hours || minutes == 0
     @hour_hand.x2 = 100 * Math.sin((12 - hours) * 30 * Math::PI / 180) + CLOCK_X
     @hour_hand.y2 = -100 * Math.cos((12 - hours) * 30 * Math::PI / 180) + CLOCK_Y
@@ -290,8 +295,8 @@ def main
       resizable: false
 
   make_clock
-  set_clock
   make_buttons
+  set_clock
   set_score
   set_lives
 
@@ -306,6 +311,7 @@ def main
     quit if key == 'escape'
     set_clock if key == 't'
     set_minute_display if key == 'm'
+    set_block_hours if key == 'b'
   end
 
   on :mouse_down do |event|

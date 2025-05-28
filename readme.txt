@@ -8,6 +8,7 @@ Controls:
   - Mouse:  Click buttons
   - t:      Change time
   - m:      Show/hide minutes
+  - b:      Enable/disable block_hours
   - esc:    quit (does not print final score)
 
 Enable/disable optional features by editing instance variables in telling_time.rb
