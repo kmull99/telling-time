@@ -12,6 +12,7 @@ CLOCK_Y = 240
 @rand = Random.new
 
 @score = 0
+@streak = 0
 @starting_lives = 3
 @lives = []
 
@@ -34,19 +35,21 @@ CLOCK_Y = 240
 
 @answer = nil
 
-@sounds = { correct: nil, wrong: nil, button: nil, lose: nil }
+@sounds = { correct: nil, streak: nil, wrong: nil, button: nil, lose: nil }
 @output = { score: nil }
 
 def check_answer
   return unless @current_hour_button && @current_minute_button
 
   if @answer == [@hour_buttons.index(@current_hour_button) + 1, 5 * (@minute_buttons.index(@current_minute_button) + 1)]
-    @sounds[:correct].play
+    @streak += 1
+    @streak % 10 == 0 ? @sounds[:streak].play : @sounds[:correct].play
     increment_score
     set_clock
     reset_buttons
   else
     @sounds[:wrong].play
+    @streak = 0
     decrement_lives
   end
 end
@@ -243,11 +246,11 @@ def set_clock(hours = nil, minutes = nil)
 
   hours ||= rand(12)
   if @block_hours || minutes == 0
-    @hour_hand.x2 = 100 * Math.sin((12 - hours) * 30 * Math::PI / 180) + CLOCK_X
-    @hour_hand.y2 = -100 * Math.cos((12 - hours) * 30 * Math::PI / 180) + CLOCK_Y
+    @hour_hand.x2 = 50 * Math.sin((12 - hours) * 30 * Math::PI / 180) + CLOCK_X
+    @hour_hand.y2 = -50 * Math.cos((12 - hours) * 30 * Math::PI / 180) + CLOCK_Y
   else
-    @hour_hand.x2 = 100 * Math.sin((12.0 - hours + (12.0 - minutes) / 12) * 30 * Math::PI / 180) + CLOCK_X
-    @hour_hand.y2 = -100 * Math.cos((12.0 - hours + (12.0 - minutes) / 12) * 30 * Math::PI / 180) + CLOCK_Y
+    @hour_hand.x2 = 50 * Math.sin((12.0 - hours + (12.0 - minutes) / 12) * 30 * Math::PI / 180) + CLOCK_X
+    @hour_hand.y2 = -50 * Math.cos((12.0 - hours + (12.0 - minutes) / 12) * 30 * Math::PI / 180) + CLOCK_Y
   end
 
   @answer = [12 - hours, (12 - minutes) * 5]
@@ -294,10 +297,11 @@ def main
   set_score
   set_lives
 
-  @sounds[:correct] = Sound.new('assets/sounds/duolingo-correct.mp3')
-  @sounds[:wrong] = Sound.new('assets/sounds/duolingo-wrong.mp3')
+  @sounds[:correct] = Sound.new('assets/sounds/minecraft-xp.mp3')
+  @sounds[:streak] = Sound.new('assets/sounds/minecraft-level-up.mp3')
+  @sounds[:wrong] = Sound.new('assets/sounds/minecraft-hurt.mp3')
   @sounds[:button] = Sound.new('assets/sounds/minecraft-click.mp3')
-  @sounds[:lose] = Sound.new('assets/sounds/error.mp3')
+  @sounds[:lose] = Sound.new('assets/sounds/villager-death.mp3')
 
   on :key_down do |event|
     key = event.key
